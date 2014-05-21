@@ -3,13 +3,22 @@ require 'sinatra'
 
 set :sessions, true
 
-get '/home' do
-  "Hey Sarah, good job!"
+get '/' do
+  erb :username_form
 end
 
-get '/template' do
-  erb :my_template
-  end
+post '/username_filled' do
+  session[:username] = params[:username]
+  redirect '/bet'
+end
+
+get '/bet' do
+  erb :bet_form
+end
+
+
+
+
 
 
 
