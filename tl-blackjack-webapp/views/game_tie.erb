@@ -1,0 +1,13 @@
+<h2>Your cards' total is <%= cards_total(session[:player_cards]) %> and the dealer's total is <%= cards_total(session[:dealer_cards]) %>.<br>
+  It's a tie!</h2>
+
+<h3><%= session[:player_name] %>, your cards are:<br></h3>
+  <% session[:player_cards].each do |card|%>
+    <%= img(card) %>
+  <% end %>
+<h4><%= session[:player_name] %>'s cards total is <%= cards_total(session[:player_cards]) %></h4>
+
+<h3>The dealer's cards are:<br></h3>
+  <% session[:dealer_cards].each do |card|%>
+    <%= img(card) %>
+  <% end %>

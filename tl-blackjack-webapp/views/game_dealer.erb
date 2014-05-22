@@ -1,0 +1,14 @@
+<h3><%= session[:player_name] %>, your cards are:<br></h3>
+  <% session[:player_cards].each do |card|%>
+    <%= img(card) %>
+  <% end %>
+<h4><%= session[:player_name] %>'s cards total is <%= cards_total(session[:player_cards]) %></h4>
+
+<h3>The dealer's cards are:<br></h3>
+  <% session[:dealer_cards].each do |card|%>
+    <%= img(card) %>
+  <% end %>
+
+<h3>The dealer will play next. Click to see the dealer's cards.</h3>
+<form action='/game/dealer/show' method='post'>
+<input type='submit' value="See the dealer's cards" class="btn btn-primary">
