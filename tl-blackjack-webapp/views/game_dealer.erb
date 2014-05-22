@@ -9,6 +9,8 @@
     <%= img(card) %>
   <% end %>
 
+<% if @show_dealer_cards%>
 <h3>The dealer will play next. Click to see the dealer's cards.</h3>
 <form action='/game/dealer/show' method='post'>
 <input type='submit' value="See the dealer's cards" class="btn btn-primary">
+<% end%>

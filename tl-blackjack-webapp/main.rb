@@ -37,6 +37,13 @@ helpers do
   end
 end
 
+before do
+  @show_hit_or_stay = true
+end
+
+before do
+  @show_dealer_cards = true
+end
 
 get '/' do
   if session[:player_name]
@@ -67,7 +74,9 @@ get '/game/initiate' do
   session[:player_cards] << session[:deck].pop
   session[:dealer_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
-    redirect '/game/player/win'
+    @success = "Blackjack! Congratulations you win the game!"
+    @show_hit_or_stay = false
+    erb :game_player
   else
   redirect '/game/player'
   end
@@ -80,19 +89,15 @@ end
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
-    redirect '/game/player/win'
+    @success = "Blackjack! Congratulations you win the game!"
+    @show_hit_or_stay = false
+    erb :game_player
   elsif cards_total(session[:player_cards]) > 21
-    redirect '/game/player/loose'
+    @error = "Sorry, you loose the game"
+    @show_hit_or_stay = false
+    erb :game_player
   else redirect '/game/player'
   end
-end
-
-get '/game/player/win' do
-  erb :player_win
-end
-
-get '/game/player/loose' do
-  erb :player_loose
 end
 
 post '/game/player/stay' do
@@ -101,7 +106,9 @@ end
 
 get '/game/dealer' do
   if cards_total(session[:dealer_cards]) == 21
-    redirect '/game/player/loose'
+     @error = "The dealer hit blackjack. Sorry, you loose the game"
+     @show_dealer_cards = false
+     erb :game_dealer
   else
   erb :game_dealer
   end
@@ -111,21 +118,17 @@ post '/game/dealer/show'do
   until cards_total(session[:dealer_cards]) > 17
     session[:dealer_cards]<< session[:deck].pop
   end
-  redirect '/game/comparison'
-end
-
-get '/game/comparison' do
+  @show_dealer_cards = false
   if cards_total(session[:dealer_cards]) > cards_total(session[:player_cards]) && cards_total(session[:dealer_cards]) < 22
-    redirect '/game/player/loose'
+    @error = "Sorry, you loose this game"
+    erb :game_dealer
   elsif cards_total(session[:dealer_cards]) == cards_total(session[:player_cards])
-    redirect 'game/tie'
+    @success = "It's a tie. Play again!"
+    erb :game_dealer
   else
-    redirect 'game/player/win'
+    @success ='You win!'
+    erb :game_dealer
   end
-end
-
-get 'game/tie' do
-  erb :game_tie
 end
 
 
