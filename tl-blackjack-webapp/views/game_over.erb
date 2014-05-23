@@ -1,0 +1,7 @@
+<h1>Game over!</h1>
+<h3><br>Sorry, <%= session[:player_name] %>, you've spent all your money!</h3>
+
+<form action='/new_player' method='get'>
+<input type='submit' value="Start over" class="btn btn-primary">
+</form>
+

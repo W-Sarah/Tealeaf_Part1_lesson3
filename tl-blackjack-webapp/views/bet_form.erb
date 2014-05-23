@@ -1,0 +1,8 @@
+<h3>Please make a bet!</h3>
+</br>
+<h4><%= session[:player_name] %>, you have $<%= session[:bank].to_s%>.</h4>
+
+<form action='/bet' method='post'>
+  <input type='text' name='bet' placeholder="Your bet">
+  <input type='submit' class="btn btn-primary" value="Make a bet">
+</form>
