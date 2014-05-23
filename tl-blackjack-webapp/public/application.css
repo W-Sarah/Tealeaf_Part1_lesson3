@@ -1,0 +1,28 @@
+#hit {
+  float: left;
+  padding : 5px;
+}
+
+#stay {
+  float: left;
+  padding : 5px;
+}
+
+#player {
+  background-color: #00CF1F;
+  height: 320px;
+  width: 920px;
+  padding-left: 15px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+#dealer {
+  background-color: #FFFC9C;
+  height: 320px;
+  width: 920px;
+  padding-left: 15px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+

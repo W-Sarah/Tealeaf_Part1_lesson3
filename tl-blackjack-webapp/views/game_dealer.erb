@@ -1,13 +1,32 @@
-<h3><%= session[:player_name] %>, your cards are:<br></h3>
-  <% session[:player_cards].each do |card|%>
-    <%= img(card) %>
-  <% end %>
-<h4><%= session[:player_name] %>'s cards total is <%= cards_total(session[:player_cards]) %></h4>
+<% if @show_play_again%>
+  <h3>Would you like to play again?</h3> 
+  <div id="yes">
+    <form action='/game/initiate' method='get'>
+      <input type='submit' value="Yes, please!" class="btn btn-success">
+    </form>
+  </div> 
+  <div id="no"> 
+    <form action='/end_game' method='get'>
+        <input type='submit' value="No, not this time" class="btn btn-warning">
+    </form>
+  </div> 
+<% end%>
 
-<h3>The dealer's cards are:<br></h3>
-  <% session[:dealer_cards].each do |card|%>
-    <%= img(card) %>
-  <% end %>
+<div id="player">
+  <h3><%= session[:player_name] %>, your cards are:<br></h3>
+    <% session[:player_cards].each do |card|%>
+      <%= img(card) %>
+    <% end %>
+  <h4><%= session[:player_name] %>'s cards' total is <%= cards_total(session[:player_cards]) %></h4>
+</div>
+
+<div id="dealer">
+  <h3>The dealer's cards are:<br></h3>
+    <% session[:dealer_cards].each do |card|%>
+      <%= img(card) %>
+    <% end %>
+  <h4>The dealer's cards' total is <%= cards_total(session[:dealer_cards]) %></h4>
+</div>
 
 <% if @show_dealer_cards%>
 <h3>The dealer will play next. Click to see the dealer's cards.</h3>

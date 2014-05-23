@@ -45,6 +45,10 @@ before do
   @show_dealer_cards = true
 end
 
+before do
+  @show_play_again = false
+end
+
 get '/' do
   if session[:player_name]
     redirect '/game/initiate'
@@ -75,6 +79,7 @@ get '/game/initiate' do
   session[:dealer_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
     @success = "Blackjack! Congratulations you win the game!"
+    @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
   else
@@ -90,10 +95,12 @@ post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
     @success = "Blackjack! Congratulations you win the game!"
+    @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
   elsif cards_total(session[:player_cards]) > 21
-    @error = "Sorry, you loose the game"
+    @error = "Sorry #{session[:player_name]}, your total is over 21, you loose the game."
+    @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
   else redirect '/game/player'
@@ -106,8 +113,9 @@ end
 
 get '/game/dealer' do
   if cards_total(session[:dealer_cards]) == 21
-     @error = "The dealer hit blackjack. Sorry, you loose the game"
+     @error = "The dealer hit blackjack. Sorry #{session[:player_name]}, you loose the game"
      @show_dealer_cards = false
+     @show_play_again = true
      erb :game_dealer
   else
   erb :game_dealer
@@ -120,15 +128,22 @@ post '/game/dealer/show'do
   end
   @show_dealer_cards = false
   if cards_total(session[:dealer_cards]) > cards_total(session[:player_cards]) && cards_total(session[:dealer_cards]) < 22
-    @error = "Sorry, you loose this game"
+    @error = "Sorry #{session[:player_name]}, you loose this game"
+    @show_play_again = true
     erb :game_dealer
   elsif cards_total(session[:dealer_cards]) == cards_total(session[:player_cards])
     @success = "It's a tie. Play again!"
+    @show_play_again = true
     erb :game_dealer
   else
-    @success ='You win!'
+    @success ="Congratulations #{session[:player_name]}, you win the game!"
+    @show_play_again = true
     erb :game_dealer
   end
+end
+
+get '/end_game' do
+  erb :end_game
 end
 
 
