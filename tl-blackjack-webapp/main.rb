@@ -64,7 +64,16 @@ end
 
 post '/new_player' do
   session[:player_name] = params[:player_name]
+  if session[:player_name] == ""
+    redirect '/new_player/error'
+  else
   redirect '/bet'
+  end
+end
+
+get '/new_player/error' do
+  @error = "Please enter a name"
+  erb :username_form
 end
 
 get '/bet' do
