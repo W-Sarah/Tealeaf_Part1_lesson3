@@ -51,19 +51,42 @@ end
 
 get '/' do
   if session[:player_name]
-    redirect '/game/initiate'
+    redirect '/bet'
   else
   redirect '/new_player'
   end 
 end
 
 get '/new_player' do
+  session[:bank] = 500
   erb :username_form
 end
 
 post '/new_player' do
   session[:player_name] = params[:player_name]
-  redirect '/game/initiate'
+  redirect '/bet'
+end
+
+get '/bet' do
+  if session[:bank] > 0
+  erb :bet_form
+  else
+  erb :game_over
+  end
+end
+
+post '/bet' do
+  session[:bet] = params[:bet]
+  if session[:bet].to_i == 0
+  redirect '/bet/error'
+  else
+  redirect 'game/initiate'
+  end
+end
+
+get '/bet/error' do
+  @error = "Please enter a bet"
+  erb :bet_form
 end
 
 get '/game/initiate' do
@@ -78,7 +101,8 @@ get '/game/initiate' do
   session[:player_cards] << session[:deck].pop
   session[:dealer_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
-    @success = "Blackjack! Congratulations you win the game!"
+    session[:bank] = session[:bank] + session[:bet].to_i
+    @success = "Blackjack! Congratulations you win the game! You now have $#{session[:bank]}"
     @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
@@ -94,12 +118,14 @@ end
 post '/game/player/hit' do
   session[:player_cards] << session[:deck].pop
   if cards_total(session[:player_cards]) == 21
-    @success = "Blackjack! Congratulations you win the game!"
+    session[:bank] = session[:bank] + session[:bet].to_i
+    @success = "Blackjack! Congratulations you win the game! You now have $#{session[:bank]}"
     @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
   elsif cards_total(session[:player_cards]) > 21
-    @error = "Sorry #{session[:player_name]}, your total is over 21, you loose the game."
+    session[:bank] = session[:bank] - session[:bet].to_i
+    @error = "Sorry #{session[:player_name]}, your total is over 21, you loose the game.You now have $#{session[:bank]}"
     @show_play_again = true
     @show_hit_or_stay = false
     erb :game_player
@@ -113,7 +139,8 @@ end
 
 get '/game/dealer' do
   if cards_total(session[:dealer_cards]) == 21
-     @error = "The dealer hit blackjack. Sorry #{session[:player_name]}, you loose the game"
+    session[:bank] = session[:bank] - session[:bet].to_i
+     @error = "The dealer hit blackjack. Sorry #{session[:player_name]}, you loose the game. You now have $#{session[:bank]}"
      @show_dealer_cards = false
      @show_play_again = true
      erb :game_dealer
@@ -128,15 +155,17 @@ post '/game/dealer/show'do
   end
   @show_dealer_cards = false
   if cards_total(session[:dealer_cards]) > cards_total(session[:player_cards]) && cards_total(session[:dealer_cards]) < 22
-    @error = "Sorry #{session[:player_name]}, you loose this game"
+    session[:bank] = session[:bank] - session[:bet].to_i
+    @error = "Sorry #{session[:player_name]}, you loose this game. You now have $#{session[:bank]}"
     @show_play_again = true
     erb :game_dealer
   elsif cards_total(session[:dealer_cards]) == cards_total(session[:player_cards])
-    @success = "It's a tie. Play again!"
+    @success = "It's a tie. Play again! You still have $#{session[:bank]}"
     @show_play_again = true
     erb :game_dealer
   else
-    @success ="Congratulations #{session[:player_name]}, you win the game!"
+    session[:bank] = session[:bank] + session[:bet].to_i
+    @success ="Congratulations #{session[:player_name]}, you win the game! You now have $#{session[:bank]}"
     @show_play_again = true
     erb :game_dealer
   end

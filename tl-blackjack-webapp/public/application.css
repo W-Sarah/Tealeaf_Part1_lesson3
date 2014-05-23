@@ -19,10 +19,20 @@
 
 #dealer {
   background-color: #FFFC9C;
-  height: 320px;
   width: 920px;
   padding-left: 15px;
   padding-bottom: 10px;
   border-radius: 10px;
 }
 
+#name {
+  text-align: center;
+}
+
+#welcome {
+  width : auto;
+  padding : 10px;
+  text-align: center;
+  background: -webkit-radial-gradient(50% 50%, circle cover, #FFFB05, #FF3126); 
+  font-family: 'Codystar', cursive;
+}
