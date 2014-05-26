@@ -1,0 +1,39 @@
+Quizz Lesson 3
+1. HTML : HyperText Markup language- language used to write webpages and structure them
+CSS : language used to format web pages 
+Javascript: language used to animate webpages
+
+2. Major parts of an HTTP Request:
+- Method (post or get)
+- Page URL
+- Request line/ Header field
+- Body
+- parameters
+
+3. Major parts of an HTTP answer:
+- Header : Response code
+- body (displaying the page)
+
+4. 
+The GET Method transfers the data within the URL itself
+url.com/?username=bob
+
+the POST method uses the body portion of the HTTP request to pass parameters
+
+5. Developpers should know that HTTP is stateless as it impacts the way an application is build. If we want a state to be maintained within the application we need to do so with cookies.
+
+6. Due to the convenience of web browsers.
+- mobile apps is another options
+
+7. MVC (Model View Controller)  is a pattern used to implement user interface
+
+Sinatra
+1. Each request is processed via a route associated with a block. The route gives the URL/method selected and the block the action associated with it (rendering, redirecting, etc)
+
+2. Rendering : show a design (erb) on the same URL
+Redirecting: sends to a new URL
+
+3. <%= %>
+
+5. instance variable in sinatra are used to show/not show parts of the html.
+
