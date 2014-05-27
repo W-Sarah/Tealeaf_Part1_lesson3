@@ -1,0 +1,69 @@
+<div id="game">
+  <%if @loser %>
+    <div class="alert alert-error"><%=@loser%></div>
+  <% end %>
+  <%if @winner %>
+    <div class="alert alert-success"><%=@winner%></div>
+  <% end %>
+
+  <% if @show_play_again%>
+    <h3>Would you like to play again?</h3> 
+      <form action='/bet' method='get'>
+        <input type='submit' value="Yes, please!" class="btn btn-success">
+      </form>
+        <form action='/end_game' method='get'>
+          <input type='submit' value="No, not this time" class="btn btn-warning">
+        </form>
+  <% end%>
+
+  <div id="player">
+    <h3><%= session[:player_name] %>, your cards are:<br></h3>
+
+      <% session[:player_cards].each do |card|%>
+        <%= img(card) %>
+      <% end %>
+    <h4><%= session[:player_name] %>'s cards' total is <%= cards_total(session[:player_cards]) %></h4>
+  </div>
+
+  <div id="dealer">
+    <h3>The dealer's cards are:<br></h3>
+    <% if @show_dealer_first_card%>
+        <% session[:dealer_cards].each do |card|%>
+        <%= img(card) %>
+      <% end %>
+      <h4>The dealer's cards' total is <%= cards_total(session[:dealer_cards]) %></h4>
+    <% else %>
+        <img src='/images/cards/cover.jpg' style='padding:2px;border:1px solid black;'>
+        <% session[:dealer_cards].drop(1).each do |card|%>
+          <%= img(card) %>
+        <% end %>
+    <% end %>
+  </div>
+
+  <% if @show_hit_or_stay%>
+    <h3>Would you like to hit or stay?</h3>
+    <div id= "hit">
+      <form id="hit_form" action='/game/player/hit' method='post'>
+        <input type='submit' name='hit' value="Hit" class="btn btn-success">
+      </form>
+    </div>
+    <div id="stay">
+      <form id="stay_form" action='/game/player/stay' method='post'>
+        <input type='submit' name='stay' value="Stay" class="btn btn-warning">
+      </form>
+    </div>
+  <% end%>
+
+    <% if @show_dealer_cards%>
+    <h3>The dealer will play next. Click to see the dealer's cards.</h3>
+      <form id="dealer_hit" action='/game/dealer/show' method='post'>
+      <input type='submit' value="See the dealer's cards" class="btn btn-primary">
+    <% end%>
+
+</div>
+
+
+
+
+
+
